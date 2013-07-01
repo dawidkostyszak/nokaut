@@ -9,5 +9,5 @@ setup(
     author='Linden Lab',
     author_email='sldev@lists.secondlife.com',
     url='http://wiki.secondlife.com/wiki/Eventlet',
-    packages=['mama']
+    packages=['nokaut']
 )
