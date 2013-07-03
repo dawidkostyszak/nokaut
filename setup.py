@@ -6,11 +6,12 @@ setup(
     name='nokaut',
     version='0.1',
     description='Coroutine-based networking library',
-    author='Linden Lab',
-    author_email='sldev@lists.secondlife.com',
-    url='http://wiki.secondlife.com/wiki/Eventlet',
+    author='Dawid Kostyszak',
+    author_email='dawid.kostyszak@stxnext.pl',
+    url='http://stxnext.pl',
     packages=['nokaut'],
     install_requires = [
         'lxml',
+        'mock',
     ],
 )
