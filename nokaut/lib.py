@@ -30,9 +30,7 @@ def parser(argv):
         sys.exit(2)
 
 
-def nokaut_api(argv):
-
-    product, key = argv
+def nokaut_api(product, key):
 
     sock = urllib.urlopen("http://api.nokaut.pl/?format=xml&key=" +
                           key +
@@ -59,4 +57,4 @@ def nokaut_api(argv):
 
 if __name__ == "__main__":
     parse = parser(sys.argv[1:])
-    print nokaut_api(parse)
+    print nokaut_api(parse[0], parse[1])
