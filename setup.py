@@ -9,5 +9,8 @@ setup(
     author='Linden Lab',
     author_email='sldev@lists.secondlife.com',
     url='http://wiki.secondlife.com/wiki/Eventlet',
-    packages=['nokaut']
+    packages=['nokaut'],
+    install_requires = [
+        'lxml',
+    ],
 )
