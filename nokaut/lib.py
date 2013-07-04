@@ -1,8 +1,8 @@
 import urllib
 import urllib2
 import sys
-import argparse
 from lxml import etree
+from scripts import parser
 
 
 class Error:
@@ -11,21 +11,6 @@ class Error:
 
     def __str__(self):
         return self.value
-
-
-def parser():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-k", nargs=2, help="-k product key")
-
-    try:
-        args = parser.parse_args()
-        if not args.k:
-            raise Error("lib.py usage: lib.py -k product key")
-        else:
-            return args.k
-    except Error, error:
-        print error
-        sys.exit()
 
 
 def nokaut_api(argv):
@@ -48,12 +33,13 @@ def nokaut_api(argv):
 
     try:
         parse_xml = etree.fromstring(xml_file)
-        if not parse_xml.find('.//message'):
+        if parse_xml.find('.//message') is None:
             url = parse_xml.find('.//url').text
             price = parse_xml.find('.//price_min').text
             print price, url
         else:
-            raise Error("Error: wrong xml key")
+            raise Error(" ".join(['Error:',
+                                 parse_xml.find('.//message').text]))
     except Error, error:
         print error
         sys.exit()

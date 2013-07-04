@@ -14,4 +14,8 @@ setup(
         'lxml',
         'mock',
     ],
+    entry_points={
+          'console_scripts': [
+              'nokaut = nokaut.script:parser']
+              }
 )
