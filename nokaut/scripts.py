@@ -20,7 +20,7 @@ def parser():
         if args.k is None:
             raise Error("lib.py usage: lib.py -k product key")
         else:
-            nokaut_api(args.k)
+            nokaut_api(args.k[0], args.k[1])
     except Error, error:
         print error
         sys.exit()

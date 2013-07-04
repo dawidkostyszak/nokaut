@@ -12,8 +12,7 @@ class Error:
         return self.value
 
 
-def nokaut_api(argv):
-    product, key = argv
+def nokaut_api(product, key):
 
     url = 'http://api.nokaut.pl/'
     values = {'keyword': product,
