@@ -13,14 +13,13 @@ class Error:
 
 def parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-k", nargs=2, help="-k product key")
+    parser.add_argument("-k", nargs=2, help="-k key product")
 
     try:
         args = parser.parse_args()
         if args.k is None:
-            raise Error("lib.py usage: lib.py -k product key")
+            raise Error("lib.py usage: lib.py -k key product")
         else:
-            nokaut_api(args.k[0], args.k[1])
+            print nokaut_api(args.k[0], args.k[1])
     except Error, error:
-        print error
-        sys.exit()
+        return error

@@ -12,7 +12,7 @@ class Error:
         return self.value
 
 
-def nokaut_api(product, key):
+def nokaut_api(key, product):
 
     url = 'http://api.nokaut.pl/'
     values = {'keyword': product,
@@ -26,18 +26,19 @@ def nokaut_api(product, key):
         xml_file = response.read()
         response.close()
     except urllib2.URLError as err:
-        print "No network connection"
-        sys.exit()
+        return "No network connection"
 
     try:
         parse_xml = etree.fromstring(xml_file)
         if parse_xml.find('.//message') is None:
-            url = parse_xml.find('.//url').text
-            price = parse_xml.find('.//price_min').text
-            print price, url
+            if parse_xml.find('.//item') is not None:
+                url = parse_xml.find('.//url').text
+                price = parse_xml.find('.//price_min').text
+                return price, url
+            else:
+                raise Error("No products")
         else:
             raise Error(" ".join(['Error:',
                                  parse_xml.find('.//message').text]))
     except Error, error:
-        print error
-        sys.exit()
+        return error
