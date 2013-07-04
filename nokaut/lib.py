@@ -42,6 +42,3 @@ def nokaut_api(argv):
     except Error, error:
         print error
         sys.exit()
-
-#python lib.py -k laptop a8839b1180ea00fa1cf7c6b74ca01bb5
-nokaut_api(parser())
