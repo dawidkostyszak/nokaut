@@ -1,60 +1,62 @@
 import urllib
+import urllib2
 import sys
-import getopt
+import argparse
 from lxml import etree
 
 
-def parser(argv):
+class Error:
+    def __init__(self, value):
+        self.value = value
 
-    product = ''
-    key = ''
+    def __str__(self):
+        return self.value
+
+
+def parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-k", nargs=2, help="-k product key")
 
     try:
-        opts, args = getopt.getopt(argv, "k", ["keys="])
-    except getopt.GetoptError:
-        print 'test.py -k <product> <key>'
-        sys.exit(2)
-
-    for opt, arg in opts:
-        if opt == '-h':
-            print 'test.py -k <product> <key>'
-            sys.exit()
-        elif opt in ("-k", "--keys"):
-            product = args[0]
-            key = args[1]
-
-    if opts:
-        return product, key
-    else:
-        print 'test.py -k <product> <key>'
-        sys.exit(2)
+        args = parser.parse_args()
+        if not args.k:
+            raise Error("lib.py usage: lib.py -k product key")
+        else:
+            return args.k
+    except Error, error:
+        print error
+        sys.exit()
 
 
-def nokaut_api(product, key):
+def nokaut_api(argv):
+    product, key = argv
 
-    sock = urllib.urlopen("http://api.nokaut.pl/?format=xml&key=" +
-                          key +
-                          "&method=nokaut.product.getByKeyword&keyword=" +
-                          product +
-                          "&filters[price][from]=1200&filters[price][to]=2200")
-    htmlSource = sock.read()
-    sock.close()
+    url = 'http://api.nokaut.pl/'
+    values = {'keyword': product,
+              'method': 'nokaut.product.getByKeyword',
+              'key': key,
+              'format': 'xml'}
+    data = urllib.urlencode(values)
 
-    root = etree.XML(htmlSource)
-    price = "2300,00"
+    try:
+        response = urllib2.urlopen(''.join([url, '?', data]), timeout=1)
+        xml_file = response.read()
+        response.close()
+    except urllib2.URLError as err:
+        print "No network connection"
+        sys.exit()
 
-    path = root.xpath("node()")
-    path2 = path[1].xpath("node()")
+    try:
+        parse_xml = etree.fromstring(xml_file)
+        if not parse_xml.find('.//message'):
+            url = parse_xml.find('.//url').text
+            price = parse_xml.find('.//price_min').text
+            print price, url
+        else:
+            raise Error("Error: wrong xml key")
+    except Error, error:
+        print error
+        sys.exit()
 
-    for i in range(1, len(path2), 2):
-        path3 = path2[i].xpath("node()")
-        if path3[9].text < price:
-            price = path3[9].text
-            url = path3[15].text
-
-    return price, url
-
-
-if __name__ == "__main__":
-    parse = parser(sys.argv[1:])
-    print nokaut_api(parse[0], parse[1])
+#python lib.py -k laptop a8839b1180ea00fa1cf7c6b74ca01bb5
+nokaut_api(parser())
