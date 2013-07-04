@@ -24,9 +24,10 @@ class SerwerTestCase(unittest.TestCase):
 
         api = lib.nokaut_api('a8839b1180ea00fa1cf7c6b74ca01bb5', 'laptop')
         parse_xml = lib.etree.fromstring(mock_xml_file)
-        
+
         self.assertEqual(
-            (parse_xml.find('.//price_min').text, parse_xml.find('.//url').text),
+            (parse_xml.find('.//price_min').text,
+             parse_xml.find('.//url').text),
             api
         )
 
