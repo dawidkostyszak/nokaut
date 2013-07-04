@@ -16,6 +16,6 @@ setup(
     ],
     entry_points={
           'console_scripts': [
-              'nokaut = nokaut.script:parser']
+              'nokaut = nokaut.scripts:parser']
               }
 )
