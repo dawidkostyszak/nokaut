@@ -1,5 +1,6 @@
 import sys
 import argparse
+from lib import nokaut_api
 
 
 class Error:
@@ -19,7 +20,7 @@ def parser():
         if args.k is None:
             raise Error("lib.py usage: lib.py -k product key")
         else:
-            return args.k
+            nokaut_api(args.k)
     except Error, error:
         print error
         sys.exit()

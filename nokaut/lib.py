@@ -2,7 +2,6 @@ import urllib
 import urllib2
 import sys
 from lxml import etree
-from scripts import parser
 
 
 class Error:
