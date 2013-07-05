@@ -19,43 +19,32 @@ NOKAUT_NO_ITEM_RESPONSE = """\
 class SerwerTestCase(unittest.TestCase):
 
     @mock.patch('lib.urllib2')
-    def test1(self, urllib2):
+    def test_price_url(self, urllib2):
         mock_xml_file = urllib2.urlopen().read.return_value = NOKAUT_RESPONSE
 
-        api = lib.nokaut_api('a8839b1180ea00fa1cf7c6b74ca01bb5', 'laptop')
+        price, url = lib.nokaut_api('a8839b1180ea00fa1cf7c6b74ca01bb5',
+                                    'laptop')
         parse_xml = lib.etree.fromstring(mock_xml_file)
 
-        self.assertEqual(
-            (parse_xml.find('.//price_min').text,
-             parse_xml.find('.//url').text),
-            api
-        )
+        self.assertEqual(price, 2739.00)
+        self.assertEqual(url, 'http://www.nokaut.pl/laptopy/hp-h4r49ea.html')
 
     @mock.patch('lib.urllib2')
-    def test2(self, urllib2):
+    def test_wrongkey_error(self, urllib2):
         mock_xml_file = urllib2.urlopen().read.return_value = NOKAUT_WRONGKEY_RESPONSE
 
-        api = lib.nokaut_api('a8839b1180ea00fa1cf7c6b74ca01bb5a', 'laptop')
-        parse_xml = lib.etree.fromstring(mock_xml_file)
-        if parse_xml.find('.//message') is not None:
-            error = 'Error: Invalid API Key'
-        else:
-            error = ""
-
-        self.assertEqual(error, api.value)
+        self.assertRaises(lib.NokautError, lib.nokaut_api,
+                          ('a8839b1180ea00fa1cf7c6b74ca01bb5a',
+                           'laptop'),
+                          'nokaut.lib.NokautError: Invalid API Key')
 
     @mock.patch('lib.urllib2')
-    def test3(self, urllib2):
+    def test_no_item_error(self, urllib2):
         mock_xml_file = urllib2.urlopen().read.return_value = NOKAUT_NO_ITEM_RESPONSE
 
-        api = lib.nokaut_api('a8839b1180ea00fa1cf7c6b74ca01bb5a', 'laptop')
-        parse_xml = lib.etree.fromstring(mock_xml_file)
-        if parse_xml.find('.//item') is not None:
-            error = ''
-        else:
-            error = 'No products'
-
-        self.assertEqual(error, api.value)
+        self.assertRaises(lib.NokautError, lib.nokaut_api,
+                          'a8839b1180ea00fa1cf7c6b74ca01bb5',
+                          'laptopadsjkadakjvfjav')
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ import sys
 from lxml import etree
 
 
-class Error:
+class NokautError(Exception):
     def __init__(self, value):
         self.value = value
 
@@ -29,15 +29,18 @@ def nokaut_api(key, product):
         xml_file = response.read()
         response.close()
     except urllib2.URLError as err:
-        return "No network connection"
+        raise NokautError("No network connection")
 
     parse_xml = etree.fromstring(xml_file)
-    if parse_xml.find('.//message') is not  None:
-        return Error(" ".join(['Error:', parse_xml.find('.//message').text]))
+    message = parse_xml.find('.//message')
+    if message is not None:
+        raise NokautError(message.text)
+
     if parse_xml.find('.//item') is None:
-        return Error("No products")
+        raise NokautError("No products")
 
     url = parse_xml.find('.//url').text
-    price = parse_xml.find('.//price_min').text
-    return price, url
+    change_coma = (parse_xml.find('.//price_min').text).replace(',', '.')
+    price_float = float(change_coma)
 
+    return price_float, url
