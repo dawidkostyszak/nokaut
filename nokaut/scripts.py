@@ -11,4 +11,4 @@ def parser():
     if args.k is None:
         print "lib.py usage: lib.py -k key product"
     else:
-        print nokaut_api(args.k[0], args.k[1])
+        print nokaut_api(args.k[1], args.k[0])

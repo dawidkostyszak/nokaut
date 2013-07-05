@@ -19,12 +19,11 @@ NOKAUT_NO_ITEM_RESPONSE = """\
 class SerwerTestCase(unittest.TestCase):
 
     @mock.patch('lib.urllib2')
-    def test_price_url(self, urllib2):
+    def test_api_response(self, urllib2):
         mock_xml_file = urllib2.urlopen().read.return_value = NOKAUT_RESPONSE
 
         price, url = lib.nokaut_api('a8839b1180ea00fa1cf7c6b74ca01bb5',
                                     'laptop')
-        parse_xml = lib.etree.fromstring(mock_xml_file)
 
         self.assertEqual(price, 2739.00)
         self.assertEqual(url, 'http://www.nokaut.pl/laptopy/hp-h4r49ea.html')
@@ -34,9 +33,8 @@ class SerwerTestCase(unittest.TestCase):
         mock_xml_file = urllib2.urlopen().read.return_value = NOKAUT_WRONGKEY_RESPONSE
 
         self.assertRaises(lib.NokautError, lib.nokaut_api,
-                          ('a8839b1180ea00fa1cf7c6b74ca01bb5a',
-                           'laptop'),
-                          'nokaut.lib.NokautError: Invalid API Key')
+                          'a8839b1180ea00fa1cf7c6b74ca01bb5a',
+                          'laptop')
 
     @mock.patch('lib.urllib2')
     def test_no_item_error(self, urllib2):

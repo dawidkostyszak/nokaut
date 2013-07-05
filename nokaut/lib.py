@@ -12,7 +12,7 @@ class NokautError(Exception):
         return self.value
 
 
-def nokaut_api(key, product):
+def nokaut_api(product, key):
 
     url = 'http://api.nokaut.pl/'
     values = {
