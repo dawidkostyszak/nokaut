@@ -9,13 +9,13 @@ setup(
     author='Dawid Kostyszak',
     author_email='dawid.kostyszak@stxnext.pl',
     url='http://stxnext.pl',
-    packages=['nokaut'],
+    packages=['nokaut_module'],
     install_requires = [
         'lxml',
         'mock',
     ],
     entry_points={
           'console_scripts': [
-              'nokaut = nokaut.scripts:parser']
+              'nokaut = lib.scripts:parser']
               }
 )
