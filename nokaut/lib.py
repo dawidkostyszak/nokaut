@@ -1,6 +1,5 @@
 import urllib
 import urllib2
-import sys
 from lxml import etree
 
 

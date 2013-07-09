@@ -1,6 +1,5 @@
-import sys
 import argparse
-from nokaut_module import nokaut_api
+from lib import nokaut_api
 
 
 def parser():
