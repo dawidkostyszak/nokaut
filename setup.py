@@ -9,7 +9,7 @@ setup(
     author='Dawid Kostyszak',
     author_email='dawid.kostyszak@stxnext.pl',
     url='http://stxnext.pl',
-    packages=['nokaut_module'],
+    packages=['lib'],
     install_requires = [
         'lxml',
         'mock',
